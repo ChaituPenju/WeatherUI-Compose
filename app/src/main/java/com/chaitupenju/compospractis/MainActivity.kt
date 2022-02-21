@@ -5,20 +5,21 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
 import com.chaitupenju.compospractis.models.WeatherHourly
 import com.chaitupenju.compospractis.models.WeatherSunsetAndRise
+import com.chaitupenju.compospractis.models.WeatherUVWindHumidity
 import com.chaitupenju.compospractis.models.WeatherWeekly
 import com.chaitupenju.compospractis.repository.DataRepository
 import com.chaitupenju.compospractis.ui.theme.BackBlue
@@ -272,8 +274,35 @@ fun WeatherUI(locationName: String) {
             }
         }
 
-        // Information about UV index, wind and humidity
+        Spacer(modifier = Modifier.padding(4.dp))
 
+        // Information about UV index, wind and humidity
+        Card(
+            modifier = Modifier
+                .padding(horizontal = 16.dp)
+                .wrapContentHeight()
+                .fillMaxWidth(),
+            backgroundColor = CardBack,
+            shape = RoundedCornerShape(24.dp),
+            elevation = 4.dp
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min),
+                horizontalArrangement = Arrangement.SpaceEvenly,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                WeatherUVWindHumidComponent(weatherUVWindHumidity = dataRepository.uvWindHumidityInfo[0])
+                Divider(
+                    modifier = Modifier.fillMaxHeight().padding(vertical = 24.dp).width(1.dp)
+                )
+                WeatherUVWindHumidComponent(weatherUVWindHumidity = dataRepository.uvWindHumidityInfo[1])
+                Divider(
+                    modifier = Modifier.fillMaxHeight().padding(vertical = 24.dp).width(1.dp)
+                )
+                WeatherUVWindHumidComponent(weatherUVWindHumidity = dataRepository.uvWindHumidityInfo[2])
+
+            }
+        }
     }
 }
 
@@ -285,7 +314,7 @@ fun WeatherTimeRowComponent(weatherItem: WeatherHourly) {
                 text = weatherItem.time.plus("AM"),
             )
 
-            Icon(
+            Image(
                 painter = painterResource(id = weatherItem.icon),
                 contentDescription = "Weather Status",
                 modifier = Modifier
@@ -324,19 +353,19 @@ fun WeatherWeekRowComponent(weatherWeek: WeatherWeekly) {
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
+            Image(
                 painter = painterResource(id = R.drawable.icon_water_drop),
                 contentDescription = "Water drop icon",
                 modifier = Modifier.size(24.dp)
             )
             Spacer(modifier = Modifier.padding(horizontal = 8.dp))
-            Icon(
+            Image(
                 painter = painterResource(id = weatherWeek.maxIcon),
                 contentDescription = "Max icon",
                 modifier = Modifier.size(24.dp)
             )
             Spacer(modifier = Modifier.padding(horizontal = 8.dp))
-            Icon(
+            Image(
                 painter = painterResource(id = weatherWeek.minIcon),
                 contentDescription = "Max icon",
                 modifier = Modifier.size(24.dp)
@@ -381,7 +410,7 @@ fun WeatherSunriseSetComponent(riseOrSet: WeatherSunsetAndRise) {
             fontFamily = FontFamily.SansSerif
         )
         Spacer(modifier = Modifier.padding(all = 16.dp))
-        Icon(
+        Image(
             painter = painterResource(id = riseOrSet.riseOrSetIcon),
             contentDescription = "Sunrise Icon",
             modifier = Modifier.size(size = 128.dp)
@@ -390,8 +419,32 @@ fun WeatherSunriseSetComponent(riseOrSet: WeatherSunsetAndRise) {
 }
 
 @Composable
-fun WeatherUVWindHumidComponent() {
+fun WeatherUVWindHumidComponent(weatherUVWindHumidity: WeatherUVWindHumidity) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = Modifier
+            .padding(vertical = 16.dp)
+    ) {
+        Image(
+            painter = painterResource(id = weatherUVWindHumidity.uwhIcon),
+            contentDescription = "The Icon",
+            modifier = Modifier.size(size = 64.dp)
+        )
+        Spacer(modifier = Modifier.padding(8.dp))
+        Text(
+            text = weatherUVWindHumidity.uwhTitle,
+            color = TextWhite,
+            fontSize = 20.sp,
+            fontWeight = FontWeight.SemiBold
+        )
 
+        Text(
+            text = weatherUVWindHumidity.uwhValue,
+            color = TextWhite,
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Normal
+        )
+    }
 }
 
 
@@ -403,7 +456,7 @@ fun DefaultPreview() {
             modifier = Modifier.fillMaxSize(),
             color = BackBlue,
         ) {
-            WeatherUI("Arora Nagar")
+//            WeatherUI("Arora Nagar")
         }
     }
 }

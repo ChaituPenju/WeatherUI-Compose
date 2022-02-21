@@ -3,6 +3,7 @@ package com.chaitupenju.compospractis.repository
 import com.chaitupenju.compospractis.R
 import com.chaitupenju.compospractis.models.WeatherHourly
 import com.chaitupenju.compospractis.models.WeatherSunsetAndRise
+import com.chaitupenju.compospractis.models.WeatherUVWindHumidity
 import com.chaitupenju.compospractis.models.WeatherWeekly
 import java.text.SimpleDateFormat
 import java.util.*
@@ -53,6 +54,25 @@ class DataRepository {
             ),
             WeatherSunsetAndRise(
                 "Sunset", "6:22 AM", R.drawable.icon_sunset
+            )
+        )
+
+    internal val uvWindHumidityInfo
+        get() = listOf(
+            WeatherUVWindHumidity(
+                uwhIcon = R.drawable.icon_uv,
+                uwhTitle = "UV index",
+                uwhValue = "Extreme"
+            ),
+            WeatherUVWindHumidity(
+                uwhIcon = R.drawable.icon_wind,
+                uwhTitle = "Wind",
+                uwhValue = "${Random.nextInt(from = 1, until = 14)} km/h"
+            ),
+            WeatherUVWindHumidity(
+                uwhIcon = R.drawable.icon_humidity,
+                uwhTitle = "Humidity",
+                uwhValue = "${Random.nextInt(from = 4, until = 57)} %"
             )
         )
 }
