@@ -5,10 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -16,6 +13,7 @@ import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -30,10 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.annotation.ExperimentalCoilApi
-import com.chaitupenju.compospractis.models.WeatherHourly
-import com.chaitupenju.compospractis.models.WeatherSunsetAndRise
-import com.chaitupenju.compospractis.models.WeatherUVWindHumidity
-import com.chaitupenju.compospractis.models.WeatherWeekly
+import com.chaitupenju.compospractis.models.*
 import com.chaitupenju.compospractis.repository.DataRepository
 import com.chaitupenju.compospractis.ui.theme.BackBlue
 import com.chaitupenju.compospractis.ui.theme.CardBack
@@ -180,7 +175,7 @@ fun WeatherUI(locationName: String) {
                 modifier = Modifier.padding(8.dp),
                 state = LazyListState(),
                 contentPadding = PaddingValues(horizontal = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 items(dataRepository.weatherTimeTemps) { weatherItem ->
                     WeatherTimeRowComponent(weatherItem = weatherItem)
@@ -242,7 +237,7 @@ fun WeatherUI(locationName: String) {
                     modifier = Modifier.padding(vertical = 12.dp)
                 ) {
                     items (dataRepository.weekWeatherInfo) { weatherWeekItem ->
-                        WeatherWeekRowComponent(weatherWeek = weatherWeekItem)
+                        WeatherWeekColumnComponent(weatherWeek = weatherWeekItem)
                     }
                 }
             }
@@ -287,20 +282,89 @@ fun WeatherUI(locationName: String) {
             elevation = 4.dp
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(IntrinsicSize.Min),
                 horizontalArrangement = Arrangement.SpaceEvenly,
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 WeatherUVWindHumidComponent(weatherUVWindHumidity = dataRepository.uvWindHumidityInfo[0])
                 Divider(
-                    modifier = Modifier.fillMaxHeight().padding(vertical = 24.dp).width(1.dp)
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(vertical = 24.dp)
+                        .width(1.dp)
                 )
                 WeatherUVWindHumidComponent(weatherUVWindHumidity = dataRepository.uvWindHumidityInfo[1])
                 Divider(
-                    modifier = Modifier.fillMaxHeight().padding(vertical = 24.dp).width(1.dp)
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .padding(vertical = 24.dp)
+                        .width(1.dp)
                 )
                 WeatherUVWindHumidComponent(weatherUVWindHumidity = dataRepository.uvWindHumidityInfo[2])
 
+            }
+        }
+        
+        // Information about other weather parameters
+        Card(
+            modifier = Modifier
+                .padding(horizontal = 16.dp, vertical = 16.dp)
+                .height(150.dp)
+                .fillMaxWidth(),
+            backgroundColor = CardBack,
+            shape = RoundedCornerShape(24.dp),
+            elevation = 4.dp
+        ) {
+            LazyColumn(
+                verticalArrangement = Arrangement.spacedBy(space = 8.dp),
+                state = rememberLazyListState(),
+                modifier = Modifier.padding(vertical = 20.dp)
+            ) {
+                items(dataRepository.weatherOtherInfos) { weatherOtherInfo ->
+                    WeatherOtherDetailsColumnComponent(weatherOtherInfo = weatherOtherInfo)
+                }
+            }
+
+        }
+
+        // Name, date and time of the data
+        Box(
+            modifier = Modifier.fillMaxWidth().height(IntrinsicSize.Min).padding(bottom = 4.dp),
+            contentAlignment = Alignment.BottomCenter
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(start = 16.dp),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = painterResource(id = R.drawable.icon_joker),
+                    contentDescription = "Joker image",
+                    modifier = Modifier.size(size = 16.dp)
+                )
+                Spacer(modifier = Modifier.padding(horizontal = 4.dp))
+                Text(
+                    text = "Weather UI - Chaitanya Penjuri",
+                    fontSize = 12.sp,
+                    fontStyle = FontStyle.Italic,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = TextWhite
+                )
+            }
+
+            Row(
+                modifier = Modifier.fillMaxWidth().padding(end = 16.dp),
+                horizontalArrangement = Arrangement.End,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "Updated 2/27 4:46 PM",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Normal,
+                    color = TextWhite
+                )
             }
         }
     }
@@ -330,7 +394,7 @@ fun WeatherTimeRowComponent(weatherItem: WeatherHourly) {
 }
 
 @Composable
-fun WeatherWeekRowComponent(weatherWeek: WeatherWeekly) {
+fun WeatherWeekColumnComponent(weatherWeek: WeatherWeekly) {
 
     Box(
         modifier = Modifier
@@ -444,6 +508,52 @@ fun WeatherUVWindHumidComponent(weatherUVWindHumidity: WeatherUVWindHumidity) {
             fontSize = 18.sp,
             fontWeight = FontWeight.Normal
         )
+    }
+}
+
+@Composable
+fun WeatherOtherDetailsColumnComponent(weatherOtherInfo: WeatherOtherInfo) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        contentAlignment = Alignment.TopCenter
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                painter = painterResource(id = weatherOtherInfo.infoIcon),
+                contentDescription = "Text icon",
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(modifier = Modifier.padding(horizontal = 4.dp))
+            Text(
+                text = weatherOtherInfo.infoTitle,
+                fontWeight = FontWeight.Bold,
+                color = TextWhite,
+                fontSize = 16.sp
+            )
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentHeight(),
+            horizontalArrangement = Arrangement.End,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = weatherOtherInfo.infoValue,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                color = Color(0xFFD3D3D3)
+            )
+        }
     }
 }
 

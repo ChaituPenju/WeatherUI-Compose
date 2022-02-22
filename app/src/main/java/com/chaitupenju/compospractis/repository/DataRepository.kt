@@ -1,10 +1,7 @@
 package com.chaitupenju.compospractis.repository
 
 import com.chaitupenju.compospractis.R
-import com.chaitupenju.compospractis.models.WeatherHourly
-import com.chaitupenju.compospractis.models.WeatherSunsetAndRise
-import com.chaitupenju.compospractis.models.WeatherUVWindHumidity
-import com.chaitupenju.compospractis.models.WeatherWeekly
+import com.chaitupenju.compospractis.models.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.random.Random
@@ -17,6 +14,9 @@ class DataRepository {
         R.drawable.icon_sun,
         R.drawable.icon_halfmoon,
     )
+
+    internal val currentDateTime
+        get() = SimpleDateFormat("m/yy, h:mm aa", Locale.ENGLISH).format(Date())
 
     internal val weatherTimeTemps
         get() = (1..12).map { i ->
@@ -73,6 +73,30 @@ class DataRepository {
                 uwhIcon = R.drawable.icon_humidity,
                 uwhTitle = "Humidity",
                 uwhValue = "${Random.nextInt(from = 4, until = 57)} %"
+            )
+        )
+
+    internal val weatherOtherInfos
+        get() = listOf(
+            WeatherOtherInfo(
+                infoIcon = R.drawable.icon_aqi,
+                infoTitle = "AQI",
+                infoValue = "Unhealthy for Sensitive Groups (107)"
+            ),
+            WeatherOtherInfo(
+                infoIcon = R.drawable.icon_pollen,
+                infoTitle = "Pollen",
+                infoValue = "Low"
+            ),
+            WeatherOtherInfo(
+                infoIcon = R.drawable.icon_driving,
+                infoTitle = "Driving difficulty",
+                infoValue = "None"
+            ),
+            WeatherOtherInfo(
+                infoIcon = R.drawable.icon_running,
+                infoTitle = "Running",
+                infoValue = "Fair"
             )
         )
 }
