@@ -1,4 +1,4 @@
-package com.chaitupenju.compospractis.models
+package com.chaitupenju.weatherui.models
 
 import androidx.annotation.DrawableRes
 

@@ -1,7 +1,7 @@
-package com.chaitupenju.compospractis.repository
+package com.chaitupenju.weatherui.repository
 
-import com.chaitupenju.compospractis.R
-import com.chaitupenju.compospractis.models.*
+import com.chaitupenju.weatherui.R
+import com.chaitupenju.weatherui.models.*
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.random.Random

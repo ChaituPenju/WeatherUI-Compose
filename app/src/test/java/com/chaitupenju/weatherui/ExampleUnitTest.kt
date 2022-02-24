@@ -1,4 +1,4 @@
-package com.chaitupenju.compospractis
+package com.chaitupenju.weatherui
 
 import org.junit.Test
 

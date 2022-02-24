@@ -1,4 +1,4 @@
-package com.chaitupenju.compospractis.ui.theme
+package com.chaitupenju.weatherui.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes
