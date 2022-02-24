@@ -61,7 +61,7 @@ fun WeatherUI(locationName: String) {
 
     Column(
         modifier = Modifier
-            .fillMaxWidth()
+            .fillMaxSize()
             .verticalScroll(state = rememberScrollState())
     ) {
         // Icon Content
@@ -71,14 +71,16 @@ fun WeatherUI(locationName: String) {
                 .padding(horizontal = 16.dp)
         ) {
             Icon(
-                Icons.Default.Menu, contentDescription = "Menu",
+                Icons.Default.Menu,
+                contentDescription = "Menu",
+                tint = TextWhite,
                 modifier = Modifier
                     .padding(top = 20.dp)
-                    .size(48.dp, 60.dp)
+                    .size(32.dp)
             )
         }
 
-        Spacer(modifier = Modifier.padding(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
         // Weather Information content
         Row(
