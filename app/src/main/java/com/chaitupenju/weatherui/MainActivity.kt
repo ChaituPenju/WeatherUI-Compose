@@ -25,7 +25,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil.annotation.ExperimentalCoilApi
 import com.chaitupenju.weatherui.models.*
 import com.chaitupenju.weatherui.repository.DataRepository
 import com.chaitupenju.weatherui.ui.theme.BackBlue
@@ -54,7 +53,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-@OptIn(ExperimentalCoilApi::class)
 @Composable
 // The whole UI parts/functions clubbed here
 fun WeatherUI(locationName: String) {
@@ -112,7 +110,7 @@ fun WeatherUI(locationName: String) {
 }
 
 
-// Composable seperate functions contributing to the UI
+// Composable separate functions contributing to the UI
 @Composable
 fun MenuIcon() {
     // Icon Content
@@ -347,7 +345,7 @@ private fun WeatherUVWindHumidityInfo(uvWindHumidityList: List<WeatherUVWindHumi
             uvWindHumidityList.forEachIndexed { index, weatherUVWindHumidity ->
                 WeatherUVWindHumidComponent(weatherUVWindHumidity = weatherUVWindHumidity)
 
-                if (!index.equals(uvWindHumidityList.size - 1))
+                if (index != uvWindHumidityList.size - 1)
                     Divider(modifier = Modifier.fillMaxHeight().padding(vertical = 24.dp).width(1.dp))
                 else Unit
             }
